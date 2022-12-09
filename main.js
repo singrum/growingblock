@@ -81,8 +81,8 @@ function init(){
 
     
     const xLength = 5;
-    const yLength = 5;
-    const zLength = 5;
+    const yLength = 10;
+    const zLength = 15;
     let cube = new THREE.Mesh(
         new THREE.BoxGeometry(xLength,yLength,zLength),
         new THREE.MeshLambertMaterial({color: 0x00ffff})
@@ -103,20 +103,26 @@ function init(){
         if(start){
             i += 0.05;
             if(direction === 0){
-                cube.matrix = new THREE.Matrix4().makeTranslation(stepX * xLength,0,yLength/2 + stepZ* zLength).multiply(
+                cube.matrix = new THREE.Matrix4().makeTranslation(stepX * xLength,0,zLength/2 + stepZ* zLength).multiply(
                     new THREE.Matrix4().makeRotationX(i).multiply(
-                    new THREE.Matrix4().makeTranslation(0,yLength/2, -zLength/2)
-                ))
+                    new THREE.Matrix4().makeTranslation(0,yLength/2, -zLength/2).multiply(
+                    new THREE.Matrix4().makeRotationX(stepZ * Math.PI/2).multiply(
+                    new THREE.Matrix4().makeRotationZ(stepX * Math.PI/2)
+                    )
+                    )))
                 if (i >= Math.PI/2){
                     start = false
                     stepZ++;
                 }
             }
             else if(direction === 1){
-                cube.matrix = new THREE.Matrix4().makeTranslation(stepX * xLength,0,-yLength/2 + stepZ* zLength).multiply(
+                cube.matrix = new THREE.Matrix4().makeTranslation(stepX * xLength,0,-zLength/2 + stepZ* zLength).multiply(
                     new THREE.Matrix4().makeRotationX(-i).multiply(
-                    new THREE.Matrix4().makeTranslation(0,yLength/2, zLength/2)
-                ))
+                    new THREE.Matrix4().makeTranslation(0,yLength/2, zLength/2).multiply(
+                        new THREE.Matrix4().makeRotationX(stepZ * Math.PI/2).multiply(
+                            new THREE.Matrix4().makeRotationZ(stepX * Math.PI/2)
+                            )
+                    )))
                 if (i >= Math.PI/2){
                     start = false
                     stepZ--;
@@ -125,7 +131,11 @@ function init(){
             else if(direction === 2){
                 cube.matrix = new THREE.Matrix4().makeTranslation(xLength/2 + stepX * xLength,0,stepZ* zLength).multiply(
                     new THREE.Matrix4().makeRotationZ(-i).multiply(
-                    new THREE.Matrix4().makeTranslation(-xLength/2,yLength/2,0)
+                    new THREE.Matrix4().makeTranslation(-xLength/2,yLength/2,0).multiply(
+                        new THREE.Matrix4().makeRotationX(stepZ * Math.PI/2).multiply(
+                            new THREE.Matrix4().makeRotationZ(stepX * Math.PI/2)
+                            )
+                    )
                 ))
                 if (i >= Math.PI/2){
                     start = false
@@ -135,7 +145,11 @@ function init(){
             else if(directiion = 3){
                 cube.matrix = new THREE.Matrix4().makeTranslation(-xLength/2 + stepX * xLength,0,stepZ* zLength).multiply(
                     new THREE.Matrix4().makeRotationZ(i).multiply(
-                    new THREE.Matrix4().makeTranslation(xLength/2,yLength/2,0)
+                    new THREE.Matrix4().makeTranslation(xLength/2,yLength/2,0).multiply(
+                        new THREE.Matrix4().makeRotationX(stepZ * Math.PI/2).multiply(
+                            new THREE.Matrix4().makeRotationZ(stepX * Math.PI/2)
+                            )
+                    )
                 ))
                 if (i >= Math.PI/2){
                     start = false
