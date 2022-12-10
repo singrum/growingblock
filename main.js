@@ -8,6 +8,7 @@ function onResize(){
 function init(){
 
     /////////////////swife detector////////////////////////////////////////
+    let curr_direction = 0
     document.addEventListener('touchstart', handleTouchStart, false);        
     document.addEventListener('touchmove', handleTouchMove, false);
 
@@ -38,15 +39,15 @@ function init(){
                                                                             
         if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
             if ( xDiff > 0 ) {
-                console.log("left"); // z-
+                curr_direction = 3;
             } else {
-                console.log("right"); // z+
+                curr_direction = 2;
             }                       
         } else {
             if ( yDiff > 0 ) {
-                console.log("up"); // x+
+                curr_direction = 0;
             } else { 
-                console.log("down "); // x-
+                curr_direction = 1;
             }                                                                 
         }
         /* reset values */
@@ -104,8 +105,36 @@ function init(){
         camera.lookAt(scene.position);
         if(start){
             i += 0.05;
+            //x+
+            if(direction === 0){
+                cube.matrix = new THREE.Matrix4().makeTranslation(worldX/2 + coordinate.x,0,coordinate.z).multiply(
+                    new THREE.Matrix4().makeRotationZ(-i).multiply(
+                    new THREE.Matrix4().makeTranslation(-worldX/2,worldY/2,0).multiply(
+                        staticMatrix
+                    )))
+                if (i >= Math.PI/2){
+                    start = false
+                    coordinate.x += worldX/2 + worldY/2;
+                    staticMatrix = new THREE.Matrix4().makeRotationZ(Math.PI / 2).multiply(staticMatrix);
+                    [worldX, worldY] = [worldY, worldX];
+                }
+            }            
+            //x-
+            else if(direction === 1){
+                cube.matrix = new THREE.Matrix4().makeTranslation(-worldX/2 + coordinate.x,0,coordinate.z).multiply(
+                    new THREE.Matrix4().makeRotationZ(i).multiply(
+                    new THREE.Matrix4().makeTranslation(worldX/2,worldY/2,0).multiply(
+                        staticMatrix
+                    )))
+                if (i >= Math.PI/2){
+                    start = false
+                    coordinate.x -= worldX/2 + worldY/2;
+                    staticMatrix = new THREE.Matrix4().makeRotationZ(Math.PI / 2).multiply(staticMatrix);
+                    [worldX, worldY] = [worldY, worldX];
+                }                
+            }            
             //z+
-            if(direction === 0 ){
+            else if(direction === 2){
                 cube.matrix = new THREE.Matrix4().makeTranslation(coordinate.x,0,worldZ/2 + coordinate.z).multiply(
                     new THREE.Matrix4().makeRotationX(i).multiply(
                     new THREE.Matrix4().makeTranslation(0,worldY/2, -worldZ/2).multiply(
@@ -119,7 +148,7 @@ function init(){
                 }
             }
             //z-
-            else if(direction === 1){
+            else if(direction === 3){
                 cube.matrix = new THREE.Matrix4().makeTranslation(coordinate.x,0,-worldZ/2 + coordinate.z).multiply(
                     new THREE.Matrix4().makeRotationX(-i).multiply(
                     new THREE.Matrix4().makeTranslation(0,worldY/2, worldZ/2).multiply(
@@ -132,42 +161,14 @@ function init(){
                     [worldZ, worldY] = [worldY, worldZ];
                 }
             }
-            //x+
-            else if(direction === 2){
-                cube.matrix = new THREE.Matrix4().makeTranslation(worldX/2 + coordinate.x,0,coordinate.z).multiply(
-                    new THREE.Matrix4().makeRotationZ(-i).multiply(
-                    new THREE.Matrix4().makeTranslation(-worldX/2,worldY/2,0).multiply(
-                        staticMatrix
-                    )))
-                if (i >= Math.PI/2){
-                    start = false
-                    coordinate.x += worldX/2 + worldY/2;
-                    staticMatrix = new THREE.Matrix4().makeRotationZ(Math.PI / 2).multiply(staticMatrix);
-                    [worldX, worldY] = [worldY, worldX];
-                }
-            }
-            //x-
-            else if(directiion = 3){
-                cube.matrix = new THREE.Matrix4().makeTranslation(-worldX/2 + coordinate.x,0,coordinate.z).multiply(
-                    new THREE.Matrix4().makeRotationZ(i).multiply(
-                    new THREE.Matrix4().makeTranslation(worldX/2,worldY/2,0).multiply(
-                        staticMatrix
-                    )))
-                if (i >= Math.PI/2){
-                    start = false
-                    coordinate.x -= worldX/2 + worldY/2;
-                    staticMatrix = new THREE.Matrix4().makeRotationZ(Math.PI / 2).multiply(staticMatrix);
-                    [worldX, worldY] = [worldY, worldX];
-                }                
-            }
+
+
             
         }
         else{
-            direction = Math.floor(Math.random() * 4);
+            direction = curr_direction;
             i = 0;
             start = true;
-            
-            console.log(coordinate)
         }
         // controls.update();
         requestAnimationFrame(renderScene);
