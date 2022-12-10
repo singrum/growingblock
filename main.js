@@ -113,7 +113,6 @@ function init(){
     let direction = 0;
     let staticMatrix = new THREE.Matrix4();
     let score = 0;
-    new THREE.TextGeometry( text, parameters );
     function renderScene(){
         
         camera.lookAt(scene.position);
