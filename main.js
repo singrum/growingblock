@@ -112,7 +112,6 @@ function init(){
     let worldToLocal = {x : 0, y : 1, z : 2};
     let direction = 0;
     let staticMatrix = new THREE.Matrix4();
-    let score = 0;
     function renderScene(){
         
         camera.lookAt(scene.position);
