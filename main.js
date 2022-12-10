@@ -112,6 +112,8 @@ function init(){
     let worldToLocal = {x : 0, y : 1, z : 2};
     let direction = 0;
     let staticMatrix = new THREE.Matrix4();
+    let score = 0;
+    new THREE.TextGeometry( text, parameters );
     function renderScene(){
         
         camera.lookAt(scene.position);
@@ -197,7 +199,7 @@ function init(){
                     worldLen.y += increment
                     appleCoordinate = {x:Math.random() * 100 - 50, z:Math.random() * 100 - 50};
                     apple.matrix = new THREE.Matrix4().makeTranslation(appleCoordinate.x,radius,appleCoordinate.z);
-                    score ++; 
+
                 }
 
             }
@@ -222,3 +224,5 @@ function init(){
     renderScene();
 }
 window.onload = init;
+
+//작아지는 거
