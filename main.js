@@ -59,7 +59,7 @@ function init(){
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.set(-50,50,15);
+    camera.position.set(-60,60,25);
     camera.lookAt(scene.position);
 
 
@@ -95,15 +95,15 @@ function init(){
 
     const radius = 0.45;
     let apple = new THREE.Mesh(
-        new THREE.BoxGeometry( radius * 2, radius * 2, radius * 2 ), 
-        new THREE.MeshLambertMaterial( { color: 0xff0000 } )
+        new THREE.PlaneGeometry( radius * 2, radius * 2, 1,1), 
+        new THREE.MeshBasicMaterial( { color: 0xffff00 } )
     )
     apple.matrixAutoUpdate = false;
     function rangeRandom(){
         return Math.floor(Math.random() * planeLen) - (planeLen - 1)/2;
     }
-    appleCoordinate = {x:rangeRandom(), z:rangeRandom()};
-    apple.matrix = new THREE.Matrix4().makeTranslation(appleCoordinate.x,radius,appleCoordinate.z);
+    let appleCoordinate = {x:rangeRandom(), z:rangeRandom()};
+    apple.matrix = new THREE.Matrix4().makeTranslation(appleCoordinate.x,0.1,appleCoordinate.z).multiply(new THREE.Matrix4().makeRotationX(-Math.PI/2));
 
     scene.add(apple)
 
@@ -209,8 +209,8 @@ function init(){
                     staticMatrix = new THREE.Matrix4().makeScale(1,(worldLen.y + increment)/worldLen.y,1).multiply(staticMatrix);
                     worldLen.y += increment
                     appleCoordinate = {x:rangeRandom(), z:rangeRandom()};
-                    console.log(appleCoordinate)
-                    apple.matrix = new THREE.Matrix4().makeTranslation(appleCoordinate.x,radius,appleCoordinate.z);
+                    
+                    apple.matrix = new THREE.Matrix4().makeTranslation(appleCoordinate.x,0.1,appleCoordinate.z).multiply(new THREE.Matrix4().makeRotationX(- Math.PI/2));
                     score++
                     console.log(score)
                     scoreBoard.innerHTML = `score : ${score}`
