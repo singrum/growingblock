@@ -113,9 +113,9 @@ function init(){
                     )))
                 if (i >= Math.PI/2){
                     start = false
-                    coordinate.x += worldZ/2 + worldY/2;
+                    coordinate.z += worldZ/2 + worldY/2;
                     staticMatrix = new THREE.Matrix4().makeRotationX(Math.PI / 2).multiply(staticMatrix);
-                    [worldX, worldY] = [worldY, worldX];
+                    [worldZ, worldY] = [worldY, worldZ];
                 }
             }
             //z-
@@ -127,9 +127,9 @@ function init(){
                     )))
                 if (i >= Math.PI/2){
                     start = false
-                    coordinate.x -= worldZ/2 + worldY/2;
+                    coordinate.z -= worldZ/2 + worldY/2;
                     staticMatrix = new THREE.Matrix4().makeRotationX(Math.PI / 2).multiply(staticMatrix);
-                    [worldX, worldY] = [worldY, worldX];
+                    [worldZ, worldY] = [worldY, worldZ];
                 }
             }
             //x+
@@ -143,7 +143,7 @@ function init(){
                     start = false
                     coordinate.x += worldX/2 + worldY/2;
                     staticMatrix = new THREE.Matrix4().makeRotationZ(Math.PI / 2).multiply(staticMatrix);
-                    [worldZ, worldY] = [worldY, worldZ];
+                    [worldX, worldY] = [worldY, worldX];
                 }
             }
             //x-
@@ -157,7 +157,7 @@ function init(){
                     start = false
                     coordinate.x -= worldX/2 + worldY/2;
                     staticMatrix = new THREE.Matrix4().makeRotationZ(Math.PI / 2).multiply(staticMatrix);
-                    [worldZ, worldY] = [worldY, worldZ];
+                    [worldX, worldY] = [worldY, worldX];
                 }                
             }
             
