@@ -59,7 +59,7 @@ function init(){
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.set(-200,200,50);
+    camera.position.set(-50,50,15);
     camera.lookAt(scene.position);
 
 
@@ -69,9 +69,10 @@ function init(){
     scene.add(spotLight);
     
 
-
+    const planeLen = 29
     let plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(100,100,1,1),
+
+        new THREE.PlaneGeometry(planeLen,planeLen,1,1),
         new THREE.MeshBasicMaterial({color: 0x777777})
         );
     plane.rotation.x = -0.5 * Math.PI;
@@ -81,9 +82,9 @@ function init(){
 
 
     
-    let boxLenX = 4;
-    let boxLenY = 4;
-    let boxLenZ = 4;
+    let boxLenX = 1;
+    let boxLenY = 1;
+    let boxLenZ = 1;
     let cube = new THREE.Mesh(
         new THREE.BoxGeometry(boxLenX,boxLenY,boxLenZ),
         new THREE.MeshLambertMaterial({color: 0x00ffff})
@@ -92,13 +93,16 @@ function init(){
     // cube.castShadow = true;
     scene.add(cube);
 
-    const radius = 1.9;
+    const radius = 0.45;
     let apple = new THREE.Mesh(
         new THREE.BoxGeometry( radius * 2, radius * 2, radius * 2 ), 
         new THREE.MeshLambertMaterial( { color: 0xff0000 } )
     )
     apple.matrixAutoUpdate = false;
-    appleCoordinate = {x:Math.floor((Math.random() * 100 - 50)/4)*4, z:Math.floor((Math.random() * 100 - 50)/4)*4};
+    function rangeRandom(){
+        return Math.floor(Math.random() * planeLen) - (planeLen - 1)/2;
+    }
+    appleCoordinate = {x:rangeRandom(), z:rangeRandom()};
     apple.matrix = new THREE.Matrix4().makeTranslation(appleCoordinate.x,radius,appleCoordinate.z);
 
     scene.add(apple)
@@ -106,7 +110,7 @@ function init(){
     let i = 0;
     let j = 0;
     let score = 0;
-    let increment = 4;
+    let increment = 1;
     let start = true
     let worldLen = {x : boxLenX, y : boxLenY, z : boxLenZ}
     let coordinate = {x : 0, z : 0};
@@ -119,6 +123,7 @@ function init(){
         if(start){
             i += 0.05;
             //x+
+            
             if(direction === 0){
                 cube.matrix = new THREE.Matrix4().makeTranslation(worldLen.x/2 + coordinate.x,0,coordinate.z).multiply(
                     new THREE.Matrix4().makeRotationZ(-i).multiply(
@@ -186,7 +191,14 @@ function init(){
             
             direction = curr_direction;
             i = 0
-            if(Math.abs(appleCoordinate.x - coordinate.x) < radius + worldLen.x/2 && Math.abs(appleCoordinate.z - coordinate.z) < radius + worldLen.z/2){
+            if(Math.abs(coordinate.x*2) - worldLen.x > planeLen-1 || Math.abs(coordinate.z*2) - worldLen.z > planeLen-1){
+                j += 0.5;
+                cube.matrix = new THREE.Matrix4().makeTranslation(coordinate.x,worldLen.y/2 - j,coordinate.z).multiply(staticMatrix)
+                if (j > 60){
+                    console.log(1);
+                }
+            }
+            else if(Math.abs(appleCoordinate.x - coordinate.x) < radius + worldLen.x/2 && Math.abs(appleCoordinate.z - coordinate.z) < radius + worldLen.z/2){
                 j+= 0.1;
                 cube.matrix = new THREE.Matrix4().makeTranslation(coordinate.x,(worldLen.y + j) / 2,coordinate.z).multiply(
                     new THREE.Matrix4().makeScale(1,(worldLen.y + j)/worldLen.y,1).multiply(staticMatrix)
@@ -196,7 +208,7 @@ function init(){
                     start = true;
                     staticMatrix = new THREE.Matrix4().makeScale(1,(worldLen.y + increment)/worldLen.y,1).multiply(staticMatrix);
                     worldLen.y += increment
-                    appleCoordinate = {x:Math.floor((Math.random() * 100 - 50)/4)*4, z:Math.floor((Math.random() * 100 - 50)/4)*4};
+                    appleCoordinate = {x:rangeRandom(), z:rangeRandom()};
                     console.log(appleCoordinate)
                     apple.matrix = new THREE.Matrix4().makeTranslation(appleCoordinate.x,radius,appleCoordinate.z);
                     score++
