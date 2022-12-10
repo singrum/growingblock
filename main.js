@@ -6,7 +6,7 @@ function onResize(){
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 function init(){
-
+    const scoreBoard = document.querySelector("#score");
     /////////////////swife detector////////////////////////////////////////
     let curr_direction = 0
     document.addEventListener('touchstart', handleTouchStart, false);        
@@ -72,7 +72,7 @@ function init(){
 
     let plane = new THREE.Mesh(
         new THREE.PlaneGeometry(100,100,1,1),
-        new THREE.MeshLambertMaterial({color: 0xffffff})
+        new THREE.MeshBasicMaterial({color: 0x777777})
         );
     plane.rotation.x = -0.5 * Math.PI;
     plane.position.set(0,0,0);
@@ -81,9 +81,9 @@ function init(){
 
 
     
-    let boxLenX = 5;
-    let boxLenY = 10;
-    let boxLenZ = 15;
+    let boxLenX = 4;
+    let boxLenY = 4;
+    let boxLenZ = 4;
     let cube = new THREE.Mesh(
         new THREE.BoxGeometry(boxLenX,boxLenY,boxLenZ),
         new THREE.MeshLambertMaterial({color: 0x00ffff})
@@ -92,19 +92,20 @@ function init(){
     // cube.castShadow = true;
     scene.add(cube);
 
-    const radius = 2;
+    const radius = 1.9;
     let apple = new THREE.Mesh(
         new THREE.BoxGeometry( radius * 2, radius * 2, radius * 2 ), 
-        new THREE.MeshBasicMaterial( { color: 0xff0000 } )
+        new THREE.MeshLambertMaterial( { color: 0xff0000 } )
     )
     apple.matrixAutoUpdate = false;
-    let appleCoordinate = {x:0, z:0}
-    apple.matrix = new THREE.Matrix4().makeTranslation(appleCoordinate.x,radius,appleCoordinate.z)
+    appleCoordinate = {x:Math.floor((Math.random() * 100 - 50)/4)*4, z:Math.floor((Math.random() * 100 - 50)/4)*4};
+    apple.matrix = new THREE.Matrix4().makeTranslation(appleCoordinate.x,radius,appleCoordinate.z);
 
     scene.add(apple)
 
     let i = 0;
     let j = 0;
+    let score = 0;
     let increment = 4;
     let start = true
     let worldLen = {x : boxLenX, y : boxLenY, z : boxLenZ}
@@ -195,9 +196,12 @@ function init(){
                     start = true;
                     staticMatrix = new THREE.Matrix4().makeScale(1,(worldLen.y + increment)/worldLen.y,1).multiply(staticMatrix);
                     worldLen.y += increment
-                    appleCoordinate = {x:Math.random() * 100 - 50, z:Math.random() * 100 - 50};
+                    appleCoordinate = {x:Math.floor((Math.random() * 100 - 50)/4)*4, z:Math.floor((Math.random() * 100 - 50)/4)*4};
+                    console.log(appleCoordinate)
                     apple.matrix = new THREE.Matrix4().makeTranslation(appleCoordinate.x,radius,appleCoordinate.z);
-
+                    score++
+                    console.log(score)
+                    scoreBoard.innerHTML = `score : ${score}`
                 }
 
             }
@@ -213,7 +217,7 @@ function init(){
 
     
     //renderer
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer( {antialias : true} );
     renderer.setClearColor(0xEEEEEE);
     renderer.setSize( window.innerWidth, window.innerHeight );
     // renderer.shadowMap.enabled = true;
