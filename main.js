@@ -11,7 +11,7 @@ function init(){
     let curr_direction = 0
     document.addEventListener('touchstart', handleTouchStart, false);        
     document.addEventListener('touchmove', handleTouchMove, false);
-
+    document.addEventListener('keydown', keydownEvent, false); 
     let xDown = null;                                                        
     let yDown = null;
 
@@ -54,6 +54,20 @@ function init(){
         xDown = null;
         yDown = null;                                             
     };
+    function keydownEvent(e){
+            if(e.keyCode === 37){
+                curr_direction = 3;
+            }
+            else if(e.keyCode === 38){
+                curr_direction = 0;
+            }
+            else if(e.keyCode === 39){
+                curr_direction = 2;
+            }
+            else if(e.keyCode === 40){
+                curr_direction = 1;
+            }
+    }
     ////////////////////////////////////////////////////////////////
 
 
