@@ -5,6 +5,7 @@ function onResize(){
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
+
 function init(){
     const scoreBoard = document.querySelector("#score");
     /////////////////swife detector////////////////////////////////////////
